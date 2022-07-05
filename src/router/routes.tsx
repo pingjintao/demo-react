@@ -1,28 +1,43 @@
-import * as React from "react";
-import { useRoutes } from "react-router-dom";
+import { RouteObject, useRoutes } from "react-router-dom";
+import { Suspense, lazy } from "react";
+import NProgress from "@/components/NProgress";
 
+interface RouteObjectRe extends RouteObject {
+  path: string;
+}
 
-const Index = React.lazy(() => import('@/pages/index'));
-const Home = React.lazy(() => import('@/pages/home'));
-const About = React.lazy(() => import('@/pages/about'));
+export const Index = lazy(() => import("@/pages/index"));
+export const Home = lazy(() => import("@/pages/home"));
+export const About = lazy(() => import("@/pages/about"));
 
+export const routes: RouteObjectRe[] = [
+  {
+    path: "/",
+    element: (
+      <Suspense fallback={<NProgress />}>
+        <Index />
+      </Suspense>
+    ),
+    children: [
+      {
+        path: "/",
+        element: (
+          <Suspense fallback={<NProgress />}>
+            <Home />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/about",
+        element: (
+          <Suspense fallback={<NProgress />}>
+            <About />
+          </Suspense>
+        ),
+      },
+    ],
+  },
+];
 export default function Routes() {
-    let element = useRoutes([
-        {
-            path: "/",
-            element: <Index />,
-            children: [
-                {
-                    path: "/",
-                    element: <Home />,
-                },
-                {
-                    path: "about", element: <About />
-                },
-
-            ],
-        },
-
-    ]);
-    return element;
+  return useRoutes(routes);
 }

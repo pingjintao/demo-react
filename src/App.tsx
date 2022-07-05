@@ -1,13 +1,12 @@
-import Routes from '@/router/routes'
-import { Suspense } from 'react'
-import NProgress from '@/components/NProgress'
+import Routes from "@/router/routes";
+import { BrowserRouter as Router } from "react-router-dom";
 
 function App() {
   return (
-    <Suspense fallback={<NProgress />}>
+    <Router>
       <Routes />
-    </Suspense>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;
